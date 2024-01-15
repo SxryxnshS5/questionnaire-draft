@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+        }
+        #retryBtn {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function showResult(isPositive) {
+            var resultDiv = document.getElementById("result");
+            var retryBtn = document.getElementById("retryBtn");
+            var yesBtn = document.getElementById("yesBtn");
+            var noBtn = document.getElementById("noBtn");
+
+            if (isPositive) {
+                resultDiv.innerHTML = "Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>, <a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'>National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.";
+                noBtn.style.display = "none";
+            } else {
+                resultDiv.innerHTML = "Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>, <a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'>National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.";
+                yesBtn.style.display = "none";
+            }
+
+            resultDiv.style.display = "block";
+            retryBtn.style.display = "block";
+        }
+
+        function resetForm() {
+            var resultDiv = document.getElementById("result");
+            var retryBtn = document.getElementById("retryBtn");
+            var yesBtn = document.getElementById("yesBtn");
+            var noBtn = document.getElementById("noBtn");
+
+            resultDiv.style.display = "none";
+        retryBtn.style.display = "none";
+        yesBtn.style.display = "inline-block"; // Set back to "inline-block"
+        noBtn.style.display = "inline-block"; // Set back to "inline-block"
+    }
+    </script>
+</head>
+<body>
+    <h2>Do you have pain in your temple, face, jaw, or jaw joint once a week or more?</h2>
+    
+    <button id="yesBtn" onclick="showResult(true)">Yes</button>
+    <button id="noBtn" onclick="showResult(false)">No</button>
+
+    <div id="result"></div>
+
+    <button id="retryBtn" onclick="resetForm()">Retry</button>
+</body>
+</html>
