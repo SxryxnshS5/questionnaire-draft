@@ -9,6 +9,15 @@
             text-align: center;
             margin: 50px;
         }
+        .question {
+            margin-bottom: 20px;
+        }
+        .yesBtn, .noBtn {
+            background-color: #ffffff; /* Default background color */
+        }
+        .yesBtn.clicked, .noBtn.clicked {
+            background-color: #4caf50; /* Green highlight */
+        }
         #result {
             display: none;
             margin-top: 20px;
@@ -19,47 +28,91 @@
         }
     </style>
     <script>
-        function showResult(isPositive) {
+        var answeredQuestions = 0;
+        var yesClicked = false;
+        var positiveResponses = 0;
+
+        function showResults(isYes, btn) {
             var resultDiv = document.getElementById("result");
             var retryBtn = document.getElementById("retryBtn");
-            var yesBtn = document.getElementById("yesBtn");
-            var noBtn = document.getElementById("noBtn");
 
-            if (isPositive) {
-                resultDiv.innerHTML = "Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>, <a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'>National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.";
-                noBtn.style.display = "none";
-                yesBtn.style.display = "none";
-            } else {
-                resultDiv.innerHTML = "Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>, <a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'>National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.";
-                yesBtn.style.display = "none";
-                noBtn.style.display = "none";
+            answeredQuestions++;
+
+            if (isYes) {
+                yesClicked = true;
+                positiveResponses++;
             }
 
-            resultDiv.style.display = "block";
-            retryBtn.style.display = "block";
+            btn.classList.add("clicked"); // Highlight the clicked button
+
+            if (answeredQuestions === 3) {
+                if (yesClicked) {
+                    resultDiv.innerHTML = "Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: " + positiveResponses + "</strong>";
+                } else {
+                    resultDiv.innerHTML = "Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: " + positiveResponses + "</strong>";
+
+                    var yesBtns = document.querySelectorAll(".yesBtn");
+                    yesBtns.forEach(btn => {
+                        btn.style.display = "none";
+                    });
+                }
+
+                resultDiv.style.display = "block";
+                retryBtn.style.display = "block";
+            } else {
+                alert("Please answer all three questions before proceeding.");
+            }
+
+            if (answeredQuestions === 3) {
+                answeredQuestions = 0;
+            }
         }
 
         function resetForm() {
             var resultDiv = document.getElementById("result");
             var retryBtn = document.getElementById("retryBtn");
-            var yesBtn = document.getElementById("yesBtn");
-            var noBtn = document.getElementById("noBtn");
+            var yesBtns = document.querySelectorAll(".yesBtn");
+            var noBtns = document.querySelectorAll(".noBtn");
 
             resultDiv.style.display = "none";
-        retryBtn.style.display = "none";
-        yesBtn.style.display = "inline-block"; // Set back to "inline-block"
-        noBtn.style.display = "inline-block"; // Set back to "inline-block"
-    }
+            retryBtn.style.display = "none";
+
+            yesBtns.forEach(btn => {
+                btn.style.display = "inline-block";
+                btn.classList.remove("clicked"); // Remove highlight
+            });
+
+            noBtns.forEach(btn => {
+                btn.style.display = "inline-block";
+                btn.classList.remove("clicked"); // Remove highlight
+            });
+
+            answeredQuestions = 0;
+            yesClicked = false;
+            positiveResponses = 0;
+        }
     </script>
 </head>
 <body>
-    <h2>Do you have pain in your temple, face, jaw, or jaw joint once a week or more?</h2>
-    
-    <button id="yesBtn" onclick="showResult(true)">Yes</button>
-    <button id="noBtn" onclick="showResult(false)">No</button>
+    <div class="question">
+        <h2>Do you have pain in your temple, face, jaw, or jaw joint once a week or more?</h2>
+        <button class="yesBtn" onclick="showResults(true, this)">Yes</button>
+        <button class="noBtn" onclick="showResults(false, this)">No</button>
+    </div>
+
+    <div class="question">
+        <h2>Do you have pain once a week or more when you open your mouth or chew?</h2>
+        <button class="yesBtn" onclick="showResults(true, this)">Yes</button>
+        <button class="noBtn" onclick="showResults(false, this)">No</button>
+    </div>
+
+    <div class="question">
+        <h2>Does your jaw lock or become stuck once a week or more?</h2>
+        <button class="yesBtn" onclick="showResults(true, this)">Yes</button>
+        <button class="noBtn" onclick="showResults(false, this)">No</button>
+    </div>
 
     <div id="result"></div>
-
     <button id="retryBtn" onclick="resetForm()">Retry</button>
 </body>
 </html>
