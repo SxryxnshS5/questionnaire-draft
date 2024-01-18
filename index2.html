@@ -85,37 +85,41 @@ ul {
 
 ul a {
     text-decoration: none;
-    color: white;
+    color: black;
 }
 </style>
 <body>
   <div class="container">
     <h1>Screening test</h1>
+    <h3 id="title2">Over the past 2 weeks have you been bothered by these problems?</h3>
+    <h4 id="title3">Options indicate following levels: <br> 0: Not at all <br> 1: Several Days <br> 2: More than half of the days <br> 3: Nearly Everyday</h4>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>
     <button id="submit" class="button">Submit</button>
     <button id="retry" class="button hide">Retry</button>
+    <ul>
+        <li><a href="index.html">1st Questionnaire</a></li>
+        <li></li><a href="index3.html">3rd Questionnaire</a></li>
+    </ul>
   </div>
-  <ul>
-    <li><a href="index.html">1st Questionnaire</a></li>
-    <li></li><a href="index3.html">3rd Questionnaire</a></li>
-</ul>
+
   <script>
     const quizData = [
       {
-        question: 'Do you have pain in your temple, face, jaw, or jaw joint once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
+        question: 'Feeling nervous, anxious or on edge',
+        options: ['0', '1', '2', '3'],
       },
       {
-        question: 'Do you have pain once a week or more when you open your mouth or chew?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
+        question: 'Not being able to stop or control worrying',
+        options: ['0', '1', '2', '3'],
       },
       {
-        question: 'Does your jaw lock or become stuck once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
+        question: 'Feeling down, depressed, or hopeless',
+        options: ['0', '1', '2', '3'],
+      },
+      {
+        question: 'Little interest or pleasure in doing things',
+        options: ['0', '1', '2', '3'],
       },
     ];
 
@@ -123,6 +127,8 @@ ul a {
     const resultContainer = document.getElementById('result');
     const submitButton = document.getElementById('submit');
     const retryButton = document.getElementById('retry');
+    const title2 = document.getElementById('title2');
+    const title3 = document.getElementById('title3')
 
     let selectedOptions = new Array(quizData.length).fill(null);
     let score = 0;
@@ -171,34 +177,33 @@ ul a {
     }
 
     function checkAnswers() {
-      if (selectedOptions.every((option) => option !== null)) {
-        selectedOptions.forEach((answer, index) => {
-          if (answer === quizData[index].answer) {
-            score++;
-          } else {
-            incorrectAnswers.push({
-              question: quizData[index].question,
-              incorrectAnswer: answer,
-              correctAnswer: quizData[index].answer,
-            });
-          }
-        });
+    let sum = 0;
 
-        displayResult();
-      }
+    if (selectedOptions.every((option) => option !== null)) {
+      selectedOptions.forEach((answer) => {
+        sum += parseInt(answer); // Convert answer to an integer and add to the sum
+      });
+
+      displayResult(sum);
     }
+  }
 
-    function displayResult() {
-      quizContainer.style.display = 'none';
-      submitButton.style.display = 'none';
-      retryButton.style.display = 'inline-block';
+  function displayResult(sum) {
+    quizContainer.style.display = 'none';
+    submitButton.style.display = 'none';
+    title2.style.display = 'none';
+    title3.style.display = 'none';
+    retryButton.style.display = 'inline-block';
 
-      if (score > 0){
-        resultContainer.innerHTML = `Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
-      } else {
-        resultContainer.innerHTML = `Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
-      }
+    if (sum < 6) {
+      
+      resultContainer.innerHTML = `<span style="color: black;">Total Score: ${sum}</span><br><br>Negative screening for substantial signs and symptoms of anxiety and depression. This is not a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression as this is a basic screening for the most common signs and symptoms of anxiety and depression. If you are concerned about your mental health or mood please consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for these two conditions and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
+    } else if (sum>5 && sum<9) {
+      resultContainer.innerHTML = `<span style="color: #FFC107;">Total Score: ${sum}</span><br><br>Positive screening for anxiety and/or depression. This is not a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression as this is a basic screening for the most common signs and symptoms of anxiety and depression. If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for these two conditions and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
+    } else {
+        resultContainer.innerHTML = `<span style="color: red;">Total Score: ${sum}</span><br><br>Positive screening for anxiety and/or depression. This is not a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression as this is a basic screening for the most common signs and symptoms of anxiety and depression. If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for these two conditions and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
     }
+  }
 
     function retryQuiz() {
       selectedOptions = new Array(quizData.length).fill(null);
