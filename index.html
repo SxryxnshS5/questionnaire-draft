@@ -8,23 +8,25 @@
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
 body {
-  font-family: 'Poppins', sans-serif;
   background: #b9b3a9;
   display: flex;
   justify-content: center;
 }
 
-.container {
+.container-quiz {
   width: 450px;
   padding: 20px;
   margin-top: 80px;
   background-color: #f7f3f2;
   border-color: black;
+  border-style: outset;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 40px;
 }
 
-h1 {
+.container-quiz h1 {
   text-align: center;
 }
 
@@ -89,7 +91,7 @@ ul a {
 }
 </style>
 <body>
-  <div class="container">
+  <div class="container-quiz">
     <h1>Screening test</h1>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>

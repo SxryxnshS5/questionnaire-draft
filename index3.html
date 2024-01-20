@@ -8,23 +8,25 @@
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
 body {
-  font-family: 'Poppins', sans-serif;
   background: #b9b3a9;
   display: flex;
   justify-content: center;
 }
 
-.container {
+.container-quiz {
   width: 450px;
   padding: 20px;
   margin-top: 80px;
   background-color: #f7f3f2;
   border-color: black;
+  border-style: outset;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 40px;
 }
 
-h1 {
+.container-quiz h1 {
   text-align: center;
 }
 
@@ -73,6 +75,10 @@ h1 {
   display: none;
 }
 
+.textField {
+  width: 220px; /* Adjust the width to your preference */
+}
+
 li{
     list-style: none;
 }
@@ -89,8 +95,9 @@ ul a {
 }
 </style>
 <body>
-  <div class="container">
-    <h1>Screening test</h1>
+  <div class="container-quiz">
+    <h1>Characteristic pain intensity </h1>
+    <h4 id="title3">** Rate your pain on a scale of 0 to 10 where, 0 is “no pain” and 10 is “pain as bad as could be” **</h4>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>
     <button id="submit" class="button">Submit</button>
@@ -101,122 +108,108 @@ ul a {
     </ul>
   </div>
 
-  <script>
-    const quizData = [
-      {
-        question: 'Do you have pain in your temple, face, jaw, or jaw joint once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-      {
-        question: 'Do you have pain once a week or more when you open your mouth or chew?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-      {
-        question: 'Does your jaw lock or become stuck once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-    ];
+<!-- Replace the existing script tag with this modified script -->
+<script>
+  const quizData = [
+    {
+      question: 'How would you rate your mouth and or face pain AT THE PRESENT TIME, that is right now',
+    },
+    {
+      question: 'In the PAST MONTH, how intense was your WORST mouth and or face pain?',
+    },
+    {
+      question: 'In the PAST MONTH, on AVERAGE, how intense was your mouth and or face pain?  (That is, your usual pain at times you were experiencing pain.) ',
+    },
+  ];
 
-    const quizContainer = document.getElementById('quiz');
-    const resultContainer = document.getElementById('result');
-    const submitButton = document.getElementById('submit');
-    const retryButton = document.getElementById('retry');
+  const quizContainer = document.getElementById('quiz');
+  const resultContainer = document.getElementById('result');
+  const submitButton = document.getElementById('submit');
+  const retryButton = document.getElementById('retry');
+  const title3 = document.getElementById('title3');
 
-    let selectedOptions = new Array(quizData.length).fill(null);
-    let score = 0;
-    let incorrectAnswers = [];
+  let userResponses = new Array(quizData.length).fill(null);
+  let incorrectAnswers = [];
 
-    function shuffleArray(array) {
-    }
+  function displayQuestions() {
+  quizData.forEach((questionData, index) => {
+    const questionElement = document.createElement('div');
+    questionElement.className = 'question';
+    questionElement.innerHTML = questionData.question;
 
-    function displayQuestions() {
-      shuffleArray(quizData);
+    const optionsElement = document.createElement('div');
+    optionsElement.className = 'options';
 
-      quizData.forEach((questionData, index) => {
-        const questionElement = document.createElement('div');
-        questionElement.className = 'question';
-        questionElement.innerHTML = questionData.question;
+    const textField = document.createElement('input');
+    textField.type = 'number';
+    textField.min = '0';
+    textField.max = '10';
+    textField.placeholder = 'Enter a number between 0 and 10';
+    
+    const warningMessage = document.createElement('div');
+    warningMessage.className = 'warning';
+    warningMessage.style.color = 'red'; // Customize the warning message color
 
-        const optionsElement = document.createElement('div');
-        optionsElement.className = 'options';
+    textField.addEventListener('input', (event) => {
+      const enteredValue = parseInt(event.target.value);
 
-        const shuffledOptions = [...questionData.options];
-        shuffleArray(shuffledOptions);
-
-        for (let i = 0; i < shuffledOptions.length; i++) {
-          const option = document.createElement('label');
-          option.className = 'option';
-
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = `quiz${index}`;
-          radio.value = shuffledOptions[i];
-
-          radio.addEventListener('change', () => {
-            selectedOptions[index] = shuffledOptions[i];
-          });
-
-          const optionText = document.createTextNode(shuffledOptions[i]);
-
-          option.appendChild(radio);
-          option.appendChild(optionText);
-          optionsElement.appendChild(option);
-        }
-
-        quizContainer.appendChild(questionElement);
-        quizContainer.appendChild(optionsElement);
-      });
-    }
-
-    function checkAnswers() {
-      if (selectedOptions.every((option) => option !== null)) {
-        selectedOptions.forEach((answer, index) => {
-          if (answer === quizData[index].answer) {
-            score++;
-          } else {
-            incorrectAnswers.push({
-              question: quizData[index].question,
-              incorrectAnswer: answer,
-              correctAnswer: quizData[index].answer,
-            });
-          }
-        });
-
-        displayResult();
-      }
-    }
-
-    function displayResult() {
-      quizContainer.style.display = 'none';
-      submitButton.style.display = 'none';
-      retryButton.style.display = 'inline-block';
-
-      if (score > 0){
-        resultContainer.innerHTML = `Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
+      // Validate if entered value is within the specified range
+      if (enteredValue >= 0 && enteredValue <= 10) {
+        userResponses[index] = enteredValue;
+        warningMessage.innerHTML = ''; // Clear the warning message if the input is valid
       } else {
-        resultContainer.innerHTML = `Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
+        // Display a warning message to the user for invalid input
+        warningMessage.innerHTML = 'Please enter a number between 0 and 10';
+        userResponses[index] = null; // Mark the response as null for invalid input
       }
+    });
+
+    // Add the textField class to the textField element
+    textField.className = 'textField';
+
+    optionsElement.appendChild(textField);
+    optionsElement.appendChild(warningMessage);
+    quizContainer.appendChild(questionElement);
+    quizContainer.appendChild(optionsElement);
+  });
+}
+
+
+  function checkAnswers() {
+    if (userResponses.every((response) => response !== null)) {
+      const sum = userResponses.reduce((acc, response) => acc + parseInt(response), 0);
+      const percentage = (sum * 10) / quizData.length;
+      displayResult(percentage);
     }
+  }
 
-    function retryQuiz() {
-      selectedOptions = new Array(quizData.length).fill(null);
-      score = 0;
-      incorrectAnswers = [];
-      quizContainer.innerHTML = '';
-      quizContainer.style.display = 'block';
-      submitButton.style.display = 'inline-block';
-      retryButton.style.display = 'none';
-      resultContainer.innerHTML = '';
-      displayQuestions();
-    }
+  function displayResult(percentage) {
+    quizContainer.style.display = 'none';
+    submitButton.style.display = 'none';
+    title3.style.display = 'none';
+    retryButton.style.display = 'inline-block';
 
-    submitButton.addEventListener('click', checkAnswers);
-    retryButton.addEventListener('click', retryQuiz);
+    resultContainer.innerHTML = `<span style="color: black;">Your characteristic pain intensity score is ${percentage.toFixed(2)}% out of 100 </span>`;
+  }
 
+  function retryQuiz() {
+    userResponses = new Array(quizData.length).fill(null);
+    incorrectAnswers = [];
+    quizContainer.innerHTML = '';
+    quizContainer.style.display = 'block';
+    submitButton.style.display = 'inline-block';
+    retryButton.style.display = 'none';
+    title3.style.display = '';
+    resultContainer.innerHTML = '';
     displayQuestions();
-  </script>
+  }
+
+  submitButton.addEventListener('click', checkAnswers);
+  retryButton.addEventListener('click', retryQuiz);
+
+  displayQuestions(); // Call the function to display questions when the page loads
+</script>
+
+
 </body>
 </html>
