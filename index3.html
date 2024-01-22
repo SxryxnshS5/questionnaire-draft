@@ -26,12 +26,17 @@ body {
   margin-bottom: 40px;
 }
 
-.container-quiz h1 {
+.container-quiz h2 {
   text-align: center;
 }
 
 .questions-container {
   margin-bottom: 20px;
+}
+
+.container-quiz p {
+  text-align: center;
+  font-size: 10px;
 }
 
 .question {
@@ -96,7 +101,7 @@ ul a {
 </style>
 <body>
   <div class="container-quiz">
-    <h1>Characteristic pain intensity </h1>
+    <h2>Characteristic pain intensity (Von Korff et al 1992) </h2>
     <h4 id="title3">** Rate your pain on a scale of 0 to 10 where, 0 is “no pain” and 10 is “pain as bad as could be” **</h4>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>
@@ -106,6 +111,7 @@ ul a {
         <li><a href="index.html">1st Questionnaire</a></li>
         <li></li><a href="index2.html">2nd Questionnaire</a></li>
     </ul>
+    <p>Von Korff M, Ormel J, Keefe FJ, Dworkin SF. Grading the severity of chronic pain. Pain. 1992 Aug;50(2):133-149. doi: 10.1016/0304-3959(92)90154-4. PMID: 1408309</p>
   </div>
 
 <!-- Replace the existing script tag with this modified script -->
@@ -140,35 +146,30 @@ ul a {
     const optionsElement = document.createElement('div');
     optionsElement.className = 'options';
 
-    const textField = document.createElement('input');
-    textField.type = 'number';
-    textField.min = '0';
-    textField.max = '10';
-    textField.placeholder = 'Enter a number between 0 and 10';
+    const selectField = document.createElement('select');
+    selectField.className = 'dropdown';
     
-    const warningMessage = document.createElement('div');
-    warningMessage.className = 'warning';
-    warningMessage.style.color = 'red'; // Customize the warning message color
+    // Adding "No pain" option
+    const noPainOption = document.createElement('option');
+    noPainOption.value = '0';
+    noPainOption.text = '0 - No pain';
+    selectField.add(noPainOption);
 
-    textField.addEventListener('input', (event) => {
-      const enteredValue = parseInt(event.target.value);
+    // Adding options from 1 to 9
+    for (let i = 1; i <= 9; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.text = i;
+      selectField.add(option);
+    }
 
-      // Validate if entered value is within the specified range
-      if (enteredValue >= 0 && enteredValue <= 10) {
-        userResponses[index] = enteredValue;
-        warningMessage.innerHTML = ''; // Clear the warning message if the input is valid
-      } else {
-        // Display a warning message to the user for invalid input
-        warningMessage.innerHTML = 'Please enter a number between 0 and 10';
-        userResponses[index] = null; // Mark the response as null for invalid input
-      }
-    });
+    // Adding "Pain as bad as it could be" option
+    const maxPainOption = document.createElement('option');
+    maxPainOption.value = '10';
+    maxPainOption.text = '10 - Pain as bad as it could be';
+    selectField.add(maxPainOption);
 
-    // Add the textField class to the textField element
-    textField.className = 'textField';
-
-    optionsElement.appendChild(textField);
-    optionsElement.appendChild(warningMessage);
+    optionsElement.appendChild(selectField);
     quizContainer.appendChild(questionElement);
     quizContainer.appendChild(optionsElement);
   });
@@ -176,12 +177,20 @@ ul a {
 
 
   function checkAnswers() {
-    if (userResponses.every((response) => response !== null)) {
-      const sum = userResponses.reduce((acc, response) => acc + parseInt(response), 0);
-      const percentage = (sum * 10) / quizData.length;
-      displayResult(percentage);
-    }
+  const dropdowns = document.querySelectorAll('.dropdown');
+
+  // Check if all dropdowns have a selected value
+  const isEveryDropdownSelected = Array.from(dropdowns).every(select => select.value !== "");
+
+  if (isEveryDropdownSelected) {
+    // Extract user responses from the selected values of dropdowns
+    userResponses = Array.from(dropdowns).map(select => parseInt(select.value));
+    
+    const sum = userResponses.reduce((acc, response) => acc + response, 0);
+    const percentage = (sum * 10) / quizData.length;
+    displayResult(percentage);
   }
+}
 
   function displayResult(percentage) {
     quizContainer.style.display = 'none';

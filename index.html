@@ -26,8 +26,13 @@ body {
   margin-bottom: 40px;
 }
 
-.container-quiz h1 {
+.container-quiz h2 {
   text-align: center;
+}
+
+.container-quiz p {
+  text-align: center;
+  font-size: 10px;
 }
 
 .questions-container {
@@ -68,7 +73,6 @@ body {
 .result {
   text-align: center;
   margin-top: 20px;
-  font-weight: bold;
 }
 
 .hide{
@@ -92,7 +96,7 @@ ul a {
 </style>
 <body>
   <div class="container-quiz">
-    <h1>Screening test</h1>
+    <h2>3Q/TMD - 3 question temporomandibular disorder screening instrument (Lövgren et al 2016)</h2>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>
     <button id="submit" class="button">Submit</button>
@@ -101,6 +105,7 @@ ul a {
         <li><a href="index2.html">2nd Questionnaire</a></li>
         <li></li><a href="index3.html">3rd Questionnaire</a></li>
     </ul>
+    <p>Lövgren A, Visscher CM, Häggman-Henrikson B, Lobbezoo F, Marklund S, Wänman A. Validity of three screening questions (3Q/TMD) in relation to the DC/TMD. J Oral Rehabil. 2016 Oct;43(10):729-36. doi: 10.1111/joor.12428. Epub 2016 Aug 30. PMID: 27573533.</p>
   </div>
 
   <script>
@@ -192,16 +197,17 @@ ul a {
     }
 
     function displayResult() {
-      quizContainer.style.display = 'none';
-      submitButton.style.display = 'none';
-      retryButton.style.display = 'inline-block';
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  retryButton.style.display = 'inline-block';
 
-      if (score > 0){
-        resultContainer.innerHTML = `Positive screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
-      } else {
-        resultContainer.innerHTML = `Negative screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
-      }
-    }
+  if (score > 0){
+    resultContainer.innerHTML = `<strong>Positive</strong> screening result. Your answers indicate a likelihood some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to now consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
+  } else {
+    resultContainer.innerHTML = `<strong>Negative</strong> screening result. Your answers have not indicated any of the common signs and symptoms of TMD. This is not a substitute for a consultation with a relevant dental or other health professional competent in making a diagnosis of TMD as this is a basic screening for the most common signs and symptoms of TMD. If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/'>NHS.UK</a>, National Institute for health and care excellence (NICE) clinical knowledge summaries; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/'>National Institute of Dental and Craniofacial Research</a>. It is important to consider discussing your signs and symptoms with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br><br><strong>Total positive responses: ${score}`;
+  }
+}
+
 
     function retryQuiz() {
       selectedOptions = new Array(quizData.length).fill(null);
