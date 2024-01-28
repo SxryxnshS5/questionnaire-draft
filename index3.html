@@ -27,7 +27,7 @@ body {
 }
 
 .container-quiz h2 {
-  text-align: center;
+  text-align: left;
 }
 
 .questions-container {
@@ -101,7 +101,7 @@ ul a {
 </style>
 <body>
   <div class="container-quiz">
-    <h2>Characteristic pain intensity (Von Korff et al 1992) </h2>
+    <h2>Characteristic pain intensity</h2>
     <h4 id="title3">** Rate your pain on a scale of 0 to 10 where, 0 is “no pain” and 10 is “pain as bad as could be” **</h4>
     <div id="quiz" class="questions-container"></div>
     <div id="result" class="result"></div>
@@ -111,7 +111,7 @@ ul a {
         <li><a href="index.html">1st Questionnaire</a></li>
         <li></li><a href="index2.html">2nd Questionnaire</a></li>
     </ul>
-    <p>Von Korff M, Ormel J, Keefe FJ, Dworkin SF. Grading the severity of chronic pain. Pain. 1992 Aug;50(2):133-149. doi: 10.1016/0304-3959(92)90154-4. PMID: 1408309</p>
+    <p>4. Von Korff M, Ormel J, Keefe FJ, Dworkin SF. Grading the severity of chronic pain. Pain. 1992 Aug;50(2):133-149. doi: 10.1016/0304-3959(92)90154-4. PMID: 1408309</p>
   </div>
 
 <!-- Replace the existing script tag with this modified script -->
@@ -198,7 +198,7 @@ ul a {
     title3.style.display = 'none';
     retryButton.style.display = 'inline-block';
 
-    resultContainer.innerHTML = `<span style="color: black;">Your characteristic pain intensity score is ${percentage.toFixed(2)}% out of 100 </span>`;
+    resultContainer.innerHTML = `<span style="color: black;">Your characteristic pain intensity score is ${percentage.toFixed(2)}% out of 100 </span><br></br>This score captures information about your pain intensity. Dental or health professionals may use this tool to monitor changes over time.`;
   }
 
   function retryQuiz() {

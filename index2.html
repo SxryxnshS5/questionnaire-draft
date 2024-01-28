@@ -26,7 +26,7 @@ body {
   margin-bottom: 40px;
 }
 .container-quiz h2 {
-  text-align: center;
+  text-align: left;
 }
 
 .questions-container {
@@ -95,7 +95,7 @@ ul a {
 </style>
 <body>
   <div class="container-quiz">
-    <h2>PHQ-4 - Patient Health Questionnaire 4 screening for levels of psychosocial distress (Lowe et al 2010; Kroenke et al 2009)</h2>
+    <h2>PHQ-4 - Patient Health Questionnaire 4 screening for levels of psychosocial distress</h2>
     <h3 id="title2">Over the past 2 weeks have you been bothered by these problems?</h3>
     
     <div id="quiz" class="questions-container"></div>
@@ -106,7 +106,7 @@ ul a {
         <li><a href="index.html">1st Questionnaire</a></li>
         <li></li><a href="index3.html">3rd Questionnaire</a></li>
     </ul>
-    <p>Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K, Schneider A, Brähler E. A 4-item measure of depression and anxiety: validation and standardization of the Patient Health Questionnaire-4 (PHQ-4) in the general population. J Affect Disord. 2010 Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17. PMID: 19616305<br></br>Kroenke K, Spitzer RL, Williams JB, Löwe B. An ultra-brief screening scale for anxiety and depression: the PHQ-4. Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi: 10.1176/appi.psy.50.6.613. PMID: 19996233.</p>
+    <p>2. Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K, Schneider A, Brähler E. A 4-item measure of depression and anxiety: validation and standardization of the Patient Health Questionnaire-4 (PHQ-4) in the general population. J Affect Disord. 2010 Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17. PMID: 19616305<br></br>3. Kroenke K, Spitzer RL, Williams JB, Löwe B. An ultra-brief screening scale for anxiety and depression: the PHQ-4. Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi: 10.1176/appi.psy.50.6.613. PMID: 19996233.</p>
   
   </div>
 
@@ -231,11 +231,11 @@ ul a {
 
     if (sum < 6) {
       
-      resultContainer.innerHTML = `<span style="color: black;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Negative</strong> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and <strong>not</strong> a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression. If you are concerned about your mental health or mood you can find relevant information and resources at <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a>. Alternatively you may wish to consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
+      resultContainer.innerHTML = `<span style="color: black;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Negative</strong> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you are concerned about your mental health or mood you can find relevant information and resources at <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a>. Alternatively, you may wish to consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
     } else if (sum>5 && sum<9) {
-      resultContainer.innerHTML = `<span style="color: #FFC107;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and <strong>not</strong> a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression. If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
+      resultContainer.innerHTML = `<span style="color: #FFC107;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
     } else {
-        resultContainer.innerHTML = `<span style="color: red;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and <strong>not</strong> a substitute for a consultation with a relevant health professional competent in making a diagnosis of anxiety or depression. If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
+        resultContainer.innerHTML = `<span style="color: red;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
     }
   }
 
