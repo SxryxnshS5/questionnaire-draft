@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-  <title>Questionnaire</title>
-  <link rel="stylesheet" href="styles.css">
+<title>Questionnaire</title>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
@@ -55,7 +56,7 @@ body {
 
 .button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: #428bca;
   color: #fff;
   border: none;
@@ -100,17 +101,15 @@ ul a {
 }
 </style>
 <body>
-  <div class="container-quiz">
-    <h2>Characteristic pain intensity<sup> 1</sup></h2>
-    <h4 id="title3">** Rate your pain on a scale of 0 to 10 where, 0 is “no pain” and 10 is “pain as bad as could be” **</h4>
-    <div id="quiz" class="questions-container"></div>
-    <div id="result" class="result"></div>
-    <button id="submit" class="button">Submit</button>
-    <button id="retry" class="button hide">Restart questionnaire</button>
-
-    <p>1. Von Korff M, Ormel J, Keefe FJ, Dworkin SF. Grading the severity of chronic pain. Pain. 1992 Aug;50(2):133-149. doi: 10.1016/0304-3959(92)90154-4. PMID: 1408309</p>
-  </div>
-
+<div class="container-quiz">
+<h2>Characteristic pain intensity<sup> 1</sup></h2>
+<h4 id="title3">** Rate your pain on a scale of 0 to 10 where, 0 is “no pain” and 10 is “pain as bad as could be” **</h4>
+<div class="questions-container" id="quiz"></div>
+<div class="result" id="result"></div>
+<button class="button" id="submit">Submit</button>
+<button class="button hide" id="retry">Restart questionnaire</button>
+<p>1. Von Korff M, Ormel J, Keefe FJ, Dworkin SF. Grading the severity of chronic pain. Pain. 1992 Aug;50(2):133-149. doi: 10.1016/0304-3959(92)90154-4. PMID: 1408309</p>
+</div>
 <!-- Replace the existing script tag with this modified script -->
 <script>
   const quizData = [
@@ -189,7 +188,7 @@ ul a {
   }
 }
 
-  function displayResult(percentage) {
+  function oldDisplayResult(percentage) {
     quizContainer.style.display = 'none';
     submitButton.style.display = 'none';
     title3.style.display = 'none';
@@ -214,8 +213,48 @@ ul a {
   retryButton.addEventListener('click', retryQuiz);
 
   displayQuestions(); // Call the function to display questions when the page loads
+
+
+function oldDisplayResult(percentage) {
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  title3.style.display = 'none';
+  retryButton.style.display = 'inline-block';
+
+  let answerSummary = `<strong>You answered as follows:</strong><br><br>`;
+  quizData.forEach((q, i) => {
+    answerSummary += `${q.question}<br>${userResponses[i]}<br><br>`;
+  });
+  answerSummary += `If this is incorrect, please click restart the questionnaire.<br><br>`;
+
+  resultContainer.innerHTML = answerSummary + `<strong>Your characteristic pain intensity score is ${percentage.toFixed(2)}% out of 100</strong><br><br>This score captures information about your pain intensity. Dental or health professionals may use this tool to monitor changes over time.`;
+}
+
+
+function displayResult(percentage) {
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  title3.style.display = 'none';
+  retryButton.style.display = 'none';
+
+  let answerSummary = `<div style="text-align: left;"><strong>Confirm your answers</strong><br>`;
+  answerSummary += `You answered as follows:<br><br>`;
+  quizData.forEach((q, i) => {
+    answerSummary += `<strong>Q${i + 1}:</strong> ${q.question}<br><strong>Answer:</strong> ${userResponses[i]}<br><br>`;
+  });
+  answerSummary += `If this is incorrect, please click `;
+  answerSummary += `<button id='inlineRetry' class='button' style="margin-left: 10px;">Restart questionnaire</button><br><br></div>`;
+
+  let resultText = `<div style="text-align: left;"><strong>Results:</strong><br>`;
+  resultText += `Total score = sum of Q1-Q3, multiplied by 10 and divided by 3, therefore your characteristic pain intensity score is <strong>${percentage.toFixed(2)}%</strong> out of 100<br><br>`;
+
+  let explanation = `<strong>Explanation:</strong><br>This score captures information about your pain intensity. Dental or health professionals may use this tool to monitor changes over time.`;
+
+  resultContainer.innerHTML = answerSummary + resultText + explanation + `</div>`;
+
+  document.getElementById('inlineRetry').addEventListener('click', retryQuiz);
+}
+
 </script>
-
-
 </body>
 </html>
