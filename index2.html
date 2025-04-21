@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-  <title>Questionnaire</title>
-  <link rel="stylesheet" href="styles.css">
+<title>Questionnaire</title>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
@@ -54,7 +55,7 @@ body {
 
 .button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: #428bca;
   color: #fff;
   border: none;
@@ -95,20 +96,16 @@ ul a {
 }
 </style>
 <body>
-  <div class="container-quiz">
-    <h2>PHQ-4 - Patient Health Questionnaire 4 screening for levels of psychosocial distress<sup> 1, 2</sup></h2>
-    <h3 id="title2">Over the past 2 weeks have you been bothered by these problems?</h3>
-    
-    <div id="quiz" class="questions-container"></div>
-    <div id="result" class="result"></div>
-    <button id="submit" class="button">Submit</button>
-    <button id="retry" class="button hide">Restart questionnaire</button>
-
-    <p>1. Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K, Schneider A, Brähler E. A 4-item measure of depression and anxiety: validation and standardization of the Patient Health Questionnaire-4 (PHQ-4) in the general population. J Affect Disord. 2010 Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17. PMID: 19616305<br></br>2. Kroenke K, Spitzer RL, Williams JB, Löwe B. An ultra-brief screening scale for anxiety and depression: the PHQ-4. Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi: 10.1176/appi.psy.50.6.613. PMID: 19996233.</p>
-  
-  </div>
-
-  <script>
+<div class="container-quiz">
+<h2>PHQ-4 - Patient Health Questionnaire 4 screening for levels of psychosocial distress<sup> 1, 2</sup></h2>
+<h3 id="title2">Over the past 2 weeks have you been bothered by these problems?</h3>
+<div class="questions-container" id="quiz"></div>
+<div class="result" id="result"></div>
+<button class="button" id="submit">Submit</button>
+<button class="button hide" id="retry">Restart questionnaire</button>
+<p>1. Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K, Schneider A, Brähler E. A 4-item measure of depression and anxiety: validation and standardization of the Patient Health Questionnaire-4 (PHQ-4) in the general population. J Affect Disord. 2010 Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17. PMID: 19616305<br/>2. Kroenke K, Spitzer RL, Williams JB, Löwe B. An ultra-brief screening scale for anxiety and depression: the PHQ-4. Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi: 10.1176/appi.psy.50.6.613. PMID: 19996233.</p>
+</div>
+<script>
     const quizData = [
       {
         question: 'Feeling nervous, anxious or on edge',
@@ -220,7 +217,7 @@ ul a {
     }
   }
 
-  function displayResult(sum) {
+  function oldDisplayResult(sum) {
     quizContainer.style.display = 'none';
     submitButton.style.display = 'none';
     title2.style.display = 'none';
@@ -253,6 +250,73 @@ ul a {
     retryButton.addEventListener('click', retryQuiz);
 
     displayQuestions();
-  </script>
+  
+
+function oldDisplayResult(sum) {
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  title2.style.display = 'none';
+  retryButton.style.display = 'inline-block';
+
+  let answerSummary = `<strong>You answered as follows:</strong><br><br>`;
+  quizData.forEach((q, i) => {
+    let labelText = '';
+    switch (selectedOptions[i]) {
+        case '0': labelText = 'Not at all'; break;
+        case '1': labelText = 'Several days'; break;
+        case '2': labelText = 'More than half of the days'; break;
+        case '3': labelText = 'Nearly every day'; break;
+    }
+    answerSummary += `${q.question}<br>${selectedOptions[i]} - ${labelText}<br><br>`;
+  });
+  answerSummary += `If this is incorrect, please click restart the questionnaire.<br><br>`;
+
+  if (sum < 6) {
+    resultContainer.innerHTML = answerSummary + `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above you have a negative screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.`;
+  } else {
+    resultContainer.innerHTML = answerSummary + `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above, you have a positive screening result for anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.`;
+  }
+}
+
+
+function displayResult(sum) {
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  title2.style.display = 'none';
+  retryButton.style.display = 'none';
+
+  let answerSummary = `<div style="text-align: left;"><strong>Confirm your answers</strong><br>`;
+  answerSummary += `You answered as follows:<br><br>`;
+  quizData.forEach((q, i) => {
+    let labelText = '';
+    switch (selectedOptions[i]) {
+        case '0': labelText = 'Not at all'; break;
+        case '1': labelText = 'Several days'; break;
+        case '2': labelText = 'More than half of the days'; break;
+        case '3': labelText = 'Nearly every day'; break;
+    }
+    answerSummary += `<strong>Q${i + 1}:</strong> ${q.question}<br><strong>Answer:</strong> ${selectedOptions[i]} - ${labelText}<br><br>`;
+  });
+  answerSummary += `If this is incorrect, please click `;
+  answerSummary += `<button id='inlineRetry' class='button' style="margin-left: 10px;">Restart questionnaire</button><br><br></div>`;
+
+  let resultText = `<div style="text-align: left;"><strong>Results:</strong><br>`;
+  resultText += `<strong>Total score = Q1+Q2+Q3+Q4 = ${sum}</strong><br>`;
+  resultText += `• <i>Greater than or equal to a score of 6 is a positive result</i><br>`;
+  resultText += `• <i>Less than a score of 6 is a negative result</i><br><br>`;
+
+  let explanation = '';
+  if (sum < 6) {
+    explanation = `<strong>Explanation:</strong><br>Based on your responses above you have a <b>negative</b> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`;
+  } else {
+    explanation = `<strong>Explanation:</strong><br>Based on your responses above, you have a <b>positive</b> screening result for anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`;
+  }
+
+  resultContainer.innerHTML = answerSummary + resultText + explanation + `</div>`;
+
+  document.getElementById('inlineRetry').addEventListener('click', retryQuiz);
+}
+
+</script>
 </body>
 </html>
