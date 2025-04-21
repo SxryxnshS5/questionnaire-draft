@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-  <title>Questionnaire</title>
-  <link rel="stylesheet" href="styles.css">
+<title>Questionnaire</title>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
@@ -55,7 +56,7 @@ body {
 
 .button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: #428bca;
   color: #fff;
   border: none;
@@ -97,132 +98,139 @@ ul a {
 }
 </style>
 <body>
-  <div class="container-quiz">
-    <h2>3Q/TMD - Screening instrument for Temporomandibular Disorder (TMD)<sup>1</sup></h2>
-    <div id="quiz" class="questions-container"></div>
-    <div id="result" class="result"></div>
-    <button id="submit" class="button">Submit</button>
-    <button id="retry" class="button hide">Restart questionnaire</button>
-    <p>1. Lövgren A, Visscher CM, Häggman-Henrikson B, Lobbezoo F, Marklund S, Wänman A. Validity of three screening questions (3Q/TMD) in relation to the DC/TMD. J Oral Rehabil. 2016 Oct;43(10):729-36. doi: 10.1111/joor.12428. Epub 2016 Aug 30. PMID: 27573533.</p>
-  </div>
+<div class="container-quiz">
+<h2>3Q/TMD - Screening instrument for Temporomandibular Disorder (TMD)<sup>1</sup></h2>
+<div class="questions-container" id="quiz"></div>
+<div class="result" id="result"></div>
+<button class="button" id="submit">Submit</button>
+<button class="button hide" id="retry">Restart questionnaire</button>
+<p>1. Lövgren A, Visscher CM, Häggman-Henrikson B, Lobbezoo F, Marklund S, Wänman A. Validity of three screening questions (3Q/TMD) in relation to the DC/TMD. J Oral Rehabil. 2016 Oct;43(10):729-36. doi: 10.1111/joor.12428. Epub 2016 Aug 30. PMID: 27573533.</p>
+</div>
+<script>
+const quizData = [
+  {
+    question: 'Do you have pain in your temple, face, jaw, or jaw joint once a week or more?',
+    options: ['Yes', 'No'],
+    answer: 'Yes',
+  },
+  {
+    question: 'Do you have pain once a week or more when you open your mouth or chew?',
+    options: ['Yes', 'No'],
+    answer: 'Yes',
+  },
+  {
+    question: 'Does your jaw lock or become stuck once a week or more?',
+    options: ['Yes', 'No'],
+    answer: 'Yes',
+  },
+];
 
-  <script>
-    const quizData = [
-      {
-        question: 'Do you have pain in your temple, face, jaw, or jaw joint once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-      {
-        question: 'Do you have pain once a week or more when you open your mouth or chew?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-      {
-        question: 'Does your jaw lock or become stuck once a week or more?',
-        options: ['Yes', 'No'],
-        answer: 'Yes',
-      },
-    ];
+const quizContainer = document.getElementById('quiz');
+const resultContainer = document.getElementById('result');
+const submitButton = document.getElementById('submit');
+const retryButton = document.getElementById('retry');
 
-    const quizContainer = document.getElementById('quiz');
-    const resultContainer = document.getElementById('result');
-    const submitButton = document.getElementById('submit');
-    const retryButton = document.getElementById('retry');
+let selectedOptions = new Array(quizData.length).fill(null);
+let score = 0;
+let incorrectAnswers = [];
 
-    let selectedOptions = new Array(quizData.length).fill(null);
-    let score = 0;
-    let incorrectAnswers = [];
+function shuffleArray(array) {}
 
-    function shuffleArray(array) {
-    }
+function displayQuestions() {
+  shuffleArray(quizData);
+  quizData.forEach((questionData, index) => {
+    const questionElement = document.createElement('div');
+    questionElement.className = 'question';
+    questionElement.innerHTML = questionData.question;
 
-    function displayQuestions() {
-      shuffleArray(quizData);
+    const optionsElement = document.createElement('div');
+    optionsElement.className = 'options';
 
-      quizData.forEach((questionData, index) => {
-        const questionElement = document.createElement('div');
-        questionElement.className = 'question';
-        questionElement.innerHTML = questionData.question;
+    const shuffledOptions = [...questionData.options];
+    shuffleArray(shuffledOptions);
 
-        const optionsElement = document.createElement('div');
-        optionsElement.className = 'options';
+    for (let i = 0; i < shuffledOptions.length; i++) {
+      const option = document.createElement('label');
+      option.className = 'option';
 
-        const shuffledOptions = [...questionData.options];
-        shuffleArray(shuffledOptions);
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `quiz${index}`;
+      radio.value = shuffledOptions[i];
 
-        for (let i = 0; i < shuffledOptions.length; i++) {
-          const option = document.createElement('label');
-          option.className = 'option';
-
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = `quiz${index}`;
-          radio.value = shuffledOptions[i];
-
-          radio.addEventListener('change', () => {
-            selectedOptions[index] = shuffledOptions[i];
-          });
-
-          const optionText = document.createTextNode(shuffledOptions[i]);
-
-          option.appendChild(radio);
-          option.appendChild(optionText);
-          optionsElement.appendChild(option);
-        }
-
-        quizContainer.appendChild(questionElement);
-        quizContainer.appendChild(optionsElement);
+      radio.addEventListener('change', () => {
+        selectedOptions[index] = shuffledOptions[i];
       });
+
+      const optionText = document.createTextNode(shuffledOptions[i]);
+
+      option.appendChild(radio);
+      option.appendChild(optionText);
+      optionsElement.appendChild(option);
     }
 
-    function checkAnswers() {
-      if (selectedOptions.every((option) => option !== null)) {
-        selectedOptions.forEach((answer, index) => {
-          if (answer === quizData[index].answer) {
-            score++;
-          } else {
-            incorrectAnswers.push({
-              question: quizData[index].question,
-              incorrectAnswer: answer,
-              correctAnswer: quizData[index].answer,
-            });
-          }
-        });
+    quizContainer.appendChild(questionElement);
+    quizContainer.appendChild(optionsElement);
+  });
+}
 
-        displayResult();
-      }
-    }
-
-    function displayResult() {
-  quizContainer.style.display = 'none';
-  submitButton.style.display = 'none';
-  retryButton.style.display = 'inline-block';
-
-  if (score > 1){
-    resultContainer.innerHTML = `<strong>Positive</strong> screening result. Your answers to this screening questionnaire indicate some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). As a basic screening tool, this result is <strong>not</strong> a substitute for a consultation with a relevant health professional. If you are concerned about your symptoms, please consider making an appointment with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br></br> If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>,<a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'> National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>.<br><br><strong>Total positive responses: ${score}`;
-  } else {
-    resultContainer.innerHTML = `<strong>Negative</strong> screening result. Your answers have not indicated any of the common signs and symptoms of TMD. As a basic screening tool, this result is <strong>not</strong> a substitute for a consultation with a relevant health professional. If you are concerned about your symptoms, please consider making an appointment with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.<br></br> If you would like to learn more about TMD, visit any of the following direct links: in the UK – <a href='https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/'>NHS.UK</a>,<a href='https://cks.nice.org.uk/topics/temporomandibular-disorders-tmds/'> National Institute for health and care excellence (NICE) clinical knowledge summaries</a>; worldwide – <a href='https://www.tmj.org/'>Temporomandibular Joint Association</a> (patient advocacy agency), <a href='https://www.nidcr.nih.gov/health-info/tmd'>National Institute of Dental and Craniofacial Research</a>.<br><br><strong>Total positive responses: ${score}`;
+function checkAnswers() {
+  if (selectedOptions.every((option) => option !== null)) {
+    score = 0;
+    selectedOptions.forEach((answer, index) => {
+      if (answer === quizData[index].answer) score++;
+    });
+    displayResult();
   }
 }
 
+function retryQuiz() {
+  selectedOptions = new Array(quizData.length).fill(null);
+  score = 0;
+  incorrectAnswers = [];
+  quizContainer.innerHTML = '';
+  quizContainer.style.display = 'block';
+  submitButton.style.display = 'inline-block';
+  retryButton.style.display = 'none';
+  resultContainer.innerHTML = '';
+  displayQuestions();
+}
 
-    function retryQuiz() {
-      selectedOptions = new Array(quizData.length).fill(null);
-      score = 0;
-      incorrectAnswers = [];
-      quizContainer.innerHTML = '';
-      quizContainer.style.display = 'block';
-      submitButton.style.display = 'inline-block';
-      retryButton.style.display = 'none';
-      resultContainer.innerHTML = '';
-      displayQuestions();
-    }
+function displayResult() {
+  quizContainer.style.display = 'none';
+  submitButton.style.display = 'none';
+  retryButton.style.display = 'none'; // hide bottom retry button completely
 
-    submitButton.addEventListener('click', checkAnswers);
-    retryButton.addEventListener('click', retryQuiz);
+  let answerSummary = `<div style="text-align: left;"><strong>Confirm your answers</strong><br>`;
+  answerSummary += `You answered as follows:<br><br>`;
+  quizData.forEach((q, i) => {
+    answerSummary += `<strong>Q${i + 1}:</strong> ${q.question}<br><strong>Answer:</strong> ${selectedOptions[i]}<br><br>`;
+  });
+  answerSummary += `If this is incorrect, please click `;
+  answerSummary += `<button id='inlineRetry' class='button' style="margin-left: 10px;">Restart questionnaire</button><br><br></div>`;
 
-    displayQuestions();
-  </script>
+  let resultText = `<div style="text-align: left;"><strong>Results:</strong><br>`;
+  resultText += `<strong>Total number of positive responses to the three questions = ${score}</strong><br>`;
+  resultText += `• <i>Greater than or equal to 2 positive responses is a positive result</i><br>`;
+  resultText += `• <i>Less than 2 positive responses is a negative result</i><br><br>`;
+
+  let explanation = '';
+  if (score > 1){
+    explanation = `<strong>Explanation:</strong><br>Based on your responses above you have a <b>positive</b> screening result. Your answers therefore indicate some of your symptoms may be related to a benign group of conditions known as Temporomandibular Disorders (TMD). As a basic screening tool, this result is <b>not</b> a substitute for a consultation with a relevant health professional. If you are concerned about your symptoms, please consider making an appointment with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.`;
+  } else {
+    explanation = `<strong>Explanation:</strong><br>Based on your responses above you have a <b>negative</b> screening result. Your answers have not indicated any of the common signs and symptoms of TMD. As a basic screening tool, this result is <b>not</b> a substitute for a consultation with a relevant health professional. If you are concerned about your symptoms, please consider making an appointment with a relevant dental or other health professional competent in making a diagnosis of TMD so a definitive diagnosis can be either made or excluded.`;
+  }
+
+  resultContainer.innerHTML = answerSummary + resultText + explanation + `</div>`;
+
+  document.getElementById('inlineRetry').addEventListener('click', retryQuiz);
+}
+
+
+submitButton.addEventListener('click', checkAnswers);
+retryButton.addEventListener('click', retryQuiz);
+
+displayQuestions();
+</script>
 </body>
 </html>
