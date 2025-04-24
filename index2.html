@@ -1,322 +1,358 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-<title>Questionnaire</title>
-<link href="styles.css" rel="stylesheet"/>
-</head>
-<style>
+  <head>
+    <title>Questionnaire</title>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
-body {
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
-}
-
-.container-quiz {
-  width: 450px;
-  padding: 20px;
-  margin-top: 80px;
-  background-color: #f7f3f2;
-  border-color: black;
-  border-style: outset;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  font-family: 'Poppins', sans-serif;
-  margin-bottom: 40px;
-}
-.container-quiz h2 {
-  text-align: left;
-}
-
-.questions-container {
-  margin-bottom: 20px;
-}
-
-.container-quiz p {
-  text-align: center;
-  font-size: 10px;
-}
-
-.question {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.options {
-  margin-bottom: 20px;
-}
-
-.option {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.button {
-  display: inline-block;
-  padding: 10px 15px;
-  background-color: #428bca;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-  margin-right: 10px;
-}
-
-.button:hover {
-  background-color: #3071a9;
-}
-
-.result {
-  text-align: center;
-  margin-top: 20px;
-  padding-bottom: 10px;
-}
-
-.hide{
-  display: none;
-}
-
-li{
-    list-style: none;
-}
-
-ul {
-    text-align: right;
-    padding-left: 250px;
-    
-}
-
-ul a {
-    text-decoration: none;
-    color: black;
-}
-</style>
-<body>
-<div class="container-quiz">
-<h2>PHQ-4 - Patient Health Questionnaire 4 screening for levels of psychosocial distress<sup> 1, 2</sup></h2>
-<h3 id="title2">Over the past 2 weeks have you been bothered by these problems?</h3>
-<div class="questions-container" id="quiz"></div>
-<div class="result" id="result"></div>
-<button class="button" id="submit">Submit</button>
-<button class="button hide" id="retry">Restart questionnaire</button>
-<p>1. Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K, Schneider A, Brähler E. A 4-item measure of depression and anxiety: validation and standardization of the Patient Health Questionnaire-4 (PHQ-4) in the general population. J Affect Disord. 2010 Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17. PMID: 19616305<br/>2. Kroenke K, Spitzer RL, Williams JB, Löwe B. An ultra-brief screening scale for anxiety and depression: the PHQ-4. Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi: 10.1176/appi.psy.50.6.613. PMID: 19996233.</p>
-</div>
-<script>
-    const quizData = [
-      {
-        question: 'Feeling nervous, anxious or on edge',
-        options: ['0', '1', '2', '3'],
-      },
-      {
-        question: 'Not being able to stop or control worrying',
-        options: ['0', '1', '2', '3'],
-      },
-      {
-        question: 'Feeling down, depressed, or hopeless',
-        options: ['0', '1', '2', '3'],
-      },
-      {
-        question: 'Little interest or pleasure in doing things',
-        options: ['0', '1', '2', '3'],
-      },
-    ];
-
-    const quizContainer = document.getElementById('quiz');
-    const resultContainer = document.getElementById('result');
-    const submitButton = document.getElementById('submit');
-    const retryButton = document.getElementById('retry');
-    const title2 = document.getElementById('title2');
-    const title3 = document.getElementById('title3')
-
-    let selectedOptions = new Array(quizData.length).fill(null);
-    let score = 0;
-    let incorrectAnswers = [];
-
-    function shuffleArray(array) {
+    body {
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
     }
 
-    function displayQuestions() {
-      shuffleArray(quizData);
-
-      quizData.forEach((questionData, index) => {
-        const questionElement = document.createElement('div');
-        questionElement.className = 'question';
-        questionElement.innerHTML = questionData.question;
-
-        const optionsElement = document.createElement('div');
-        optionsElement.className = 'options';
-
-        const shuffledOptions = [...questionData.options];
-        shuffleArray(shuffledOptions);
-
-        for (let i = 0; i < shuffledOptions.length; i++) {
-          const option = document.createElement('label');
-          option.className = 'option';
-
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = `quiz${index}`;
-          radio.value = shuffledOptions[i];
-
-          radio.addEventListener('change', () => {
-            selectedOptions[index] = shuffledOptions[i];
-          });
-
-          const optionText = document.createTextNode(shuffledOptions[i]);
-
-              // Display the corresponding text after each option
-    let labelText = '';
-    switch (shuffledOptions[i]) {
-        case '0':
-            labelText = 'Not at all';
-            break;
-        case '1':
-            labelText = 'Several days';
-            break;
-        case '2':
-            labelText = 'More than half of the days';
-            break;
-        case '3':
-            labelText = 'Nearly every day';
-            break;
-        default:
-            break;
+    .container-quiz {
+      width: 450px;
+      padding: 20px;
+      margin-top: 80px;
+      background-color: #f7f3f2;
+      border-color: black;
+      border-style: outset;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 40px;
+    }
+    .container-quiz h2 {
+      text-align: left;
     }
 
-         // Create a separate span element for the label text
-    const labelTextSpan = document.createElement('span');
-    labelTextSpan.innerHTML = ` - ${labelText}`;
-
-    option.appendChild(radio);
-    option.appendChild(optionText);
-
-    // Append the span element to the option
-    option.appendChild(labelTextSpan);
-
-    optionsElement.appendChild(option);
-}
-
-        quizContainer.appendChild(questionElement);
-        quizContainer.appendChild(optionsElement);
-      });
+    .questions-container {
+      margin-bottom: 20px;
     }
 
-    function checkAnswers() {
-    let sum = 0;
-
-    if (selectedOptions.every((option) => option !== null)) {
-      selectedOptions.forEach((answer) => {
-        sum += parseInt(answer); // Convert answer to an integer and add to the sum
-      });
-
-      displayResult(sum);
-    }
-  }
-
-  function oldDisplayResult(sum) {
-    quizContainer.style.display = 'none';
-    submitButton.style.display = 'none';
-    title2.style.display = 'none';
-    
-    retryButton.style.display = 'inline-block';
-
-    if (sum < 6) {
-      
-      resultContainer.innerHTML = `<span style="color: black;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Negative</strong> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you are concerned about your mental health or mood you can find relevant information and resources at <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a>. Alternatively, you may wish to consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`;
-    } else if (sum>5 && sum<9) {
-      resultContainer.innerHTML = `<span style="color: #FFC107;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>Further support is also available at: <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a> and <a href='https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/'>https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/ </a>`;
-    } else {
-        resultContainer.innerHTML = `<span style="color: red;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>Further support is also available at: <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a> and <a href='https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/'>https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/ </a>`;
-    }
-  }
-
-    function retryQuiz() {
-      selectedOptions = new Array(quizData.length).fill(null);
-      score = 0;
-      incorrectAnswers = [];
-      quizContainer.innerHTML = '';
-      quizContainer.style.display = 'block';
-      submitButton.style.display = 'inline-block';
-      retryButton.style.display = 'none';
-      resultContainer.innerHTML = '';
-      displayQuestions();
+    .container-quiz p {
+      text-align: center;
+      font-size: 10px;
     }
 
-    submitButton.addEventListener('click', checkAnswers);
-    retryButton.addEventListener('click', retryQuiz);
-
-    displayQuestions();
-  
-
-function oldDisplayResult(sum) {
-  quizContainer.style.display = 'none';
-  submitButton.style.display = 'none';
-  title2.style.display = 'none';
-  retryButton.style.display = 'inline-block';
-
-  let answerSummary = `<strong>You answered as follows:</strong><br><br>`;
-  quizData.forEach((q, i) => {
-    let labelText = '';
-    switch (selectedOptions[i]) {
-        case '0': labelText = 'Not at all'; break;
-        case '1': labelText = 'Several days'; break;
-        case '2': labelText = 'More than half of the days'; break;
-        case '3': labelText = 'Nearly every day'; break;
+    .question {
+      font-weight: bold;
+      margin-bottom: 10px;
     }
-    answerSummary += `${q.question}<br>${selectedOptions[i]} - ${labelText}<br><br>`;
-  });
-  answerSummary += `If this is incorrect, please click restart the questionnaire.<br><br>`;
 
-  if (sum < 6) {
-    resultContainer.innerHTML = answerSummary + `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above you have a negative screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.`;
-  } else {
-    resultContainer.innerHTML = answerSummary + `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above, you have a positive screening result for anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.`;
-  }
-}
-
-
-function displayResult(sum) {
-  quizContainer.style.display = 'none';
-  submitButton.style.display = 'none';
-  title2.style.display = 'none';
-  retryButton.style.display = 'none';
-
-  let answerSummary = `<div style="text-align: left;"><strong>Confirm your answers</strong><br>`;
-  answerSummary += `You answered as follows:<br><br>`;
-  quizData.forEach((q, i) => {
-    let labelText = '';
-    switch (selectedOptions[i]) {
-        case '0': labelText = 'Not at all'; break;
-        case '1': labelText = 'Several days'; break;
-        case '2': labelText = 'More than half of the days'; break;
-        case '3': labelText = 'Nearly every day'; break;
+    .options {
+      margin-bottom: 20px;
     }
-    answerSummary += `<strong>Q${i + 1}:</strong> ${q.question}<br><strong>Answer:</strong> ${selectedOptions[i]} - ${labelText}<br><br>`;
-  });
-  answerSummary += `If this is incorrect, please click `;
-  answerSummary += `<button id='inlineRetry' class='button' style="margin-left: 10px;">Restart questionnaire</button><br><br></div>`;
 
-  let resultText = `<div style="text-align: left;"><strong>Results:</strong><br>`;
-  resultText += `<strong>Total score = Q1+Q2+Q3+Q4 = ${sum}</strong><br>`;
-  resultText += `• <i>Greater than or equal to a score of 6 is a positive result</i><br>`;
-  resultText += `• <i>Less than a score of 6 is a negative result</i><br><br>`;
+    .option {
+      display: block;
+      margin-bottom: 10px;
+    }
 
-  let explanation = '';
-  if (sum < 6) {
-    explanation = `<strong>Explanation:</strong><br>Based on your responses above you have a <b>negative</b> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`;
-  } else {
-    explanation = `<strong>Explanation:</strong><br>Based on your responses above, you have a <b>positive</b> screening result for anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`;
-  }
+    .button {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #428bca;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      margin-right: 10px;
+    }
 
-  resultContainer.innerHTML = answerSummary + resultText + explanation + `</div>`;
+    .button:hover {
+      background-color: #3071a9;
+    }
 
-  document.getElementById('inlineRetry').addEventListener('click', retryQuiz);
-}
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      padding-bottom: 10px;
+    }
 
-</script>
-</body>
+    .hide {
+      display: none;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    ul {
+      text-align: right;
+      padding-left: 250px;
+    }
+
+    ul a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+  <body>
+    <div class="container-quiz">
+      <h2>
+        PHQ-4 - Patient Health Questionnaire 4 screening for levels of
+        psychosocial distress<sup> 1, 2</sup>
+      </h2>
+      <h3 id="title2">
+        Over the past 2 weeks have you been bothered by these problems?
+      </h3>
+      <div class="questions-container" id="quiz"></div>
+      <div class="result" id="result"></div>
+      <button class="button" id="submit">Submit</button>
+      <button class="button hide" id="retry">Restart questionnaire</button>
+      <p>
+        1. Löwe B, Wahl I, Rose M, Spitzer C, Glaesmer H, Wingenfeld K,
+        Schneider A, Brähler E. A 4-item measure of depression and anxiety:
+        validation and standardization of the Patient Health Questionnaire-4
+        (PHQ-4) in the general population. J Affect Disord. 2010
+        Apr;122(1-2):86-95. doi: 10.1016/j.jad.2009.06.019. Epub 2009 Jul 17.
+        PMID: 19616305<br />2. Kroenke K, Spitzer RL, Williams JB, Löwe B. An
+        ultra-brief screening scale for anxiety and depression: the PHQ-4.
+        Psychosomatics. 2009 Nov-Dec;50(6):613-21. doi:
+        10.1176/appi.psy.50.6.613. PMID: 19996233.
+      </p>
+    </div>
+    <script>
+      const quizData = [
+        {
+          question: 'Feeling nervous, anxious or on edge',
+          options: ['0', '1', '2', '3'],
+        },
+        {
+          question: 'Not being able to stop or control worrying',
+          options: ['0', '1', '2', '3'],
+        },
+        {
+          question: 'Feeling down, depressed, or hopeless',
+          options: ['0', '1', '2', '3'],
+        },
+        {
+          question: 'Little interest or pleasure in doing things',
+          options: ['0', '1', '2', '3'],
+        },
+      ]
+
+      const quizContainer = document.getElementById('quiz')
+      const resultContainer = document.getElementById('result')
+      const submitButton = document.getElementById('submit')
+      const retryButton = document.getElementById('retry')
+      const title2 = document.getElementById('title2')
+      const title3 = document.getElementById('title3')
+
+      let selectedOptions = new Array(quizData.length).fill(null)
+      let score = 0
+      let incorrectAnswers = []
+
+      function shuffleArray(array) {}
+
+      function displayQuestions() {
+        shuffleArray(quizData)
+
+        quizData.forEach((questionData, index) => {
+          const questionElement = document.createElement('div')
+          questionElement.className = 'question'
+          questionElement.innerHTML = questionData.question
+
+          const optionsElement = document.createElement('div')
+          optionsElement.className = 'options'
+
+          const shuffledOptions = [...questionData.options]
+          shuffleArray(shuffledOptions)
+
+          for (let i = 0; i < shuffledOptions.length; i++) {
+            const option = document.createElement('label')
+            option.className = 'option'
+
+            const radio = document.createElement('input')
+            radio.type = 'radio'
+            radio.name = `quiz${index}`
+            radio.value = shuffledOptions[i]
+
+            radio.addEventListener('change', () => {
+              selectedOptions[index] = shuffledOptions[i]
+            })
+
+            const optionText = document.createTextNode(shuffledOptions[i])
+
+            // Display the corresponding text after each option
+            let labelText = ''
+            switch (shuffledOptions[i]) {
+              case '0':
+                labelText = 'Not at all'
+                break
+              case '1':
+                labelText = 'Several days'
+                break
+              case '2':
+                labelText = 'More than half of the days'
+                break
+              case '3':
+                labelText = 'Nearly every day'
+                break
+              default:
+                break
+            }
+
+            // Create a separate span element for the label text
+            const labelTextSpan = document.createElement('span')
+            labelTextSpan.innerHTML = ` - ${labelText}`
+
+            option.appendChild(radio)
+            option.appendChild(optionText)
+
+            // Append the span element to the option
+            option.appendChild(labelTextSpan)
+
+            optionsElement.appendChild(option)
+          }
+
+          quizContainer.appendChild(questionElement)
+          quizContainer.appendChild(optionsElement)
+        })
+      }
+
+      function checkAnswers() {
+        let sum = 0
+
+        if (selectedOptions.every((option) => option !== null)) {
+          selectedOptions.forEach((answer) => {
+            sum += parseInt(answer) // Convert answer to an integer and add to the sum
+          })
+
+          displayResult(sum)
+        }
+      }
+
+      function oldDisplayResult(sum) {
+        quizContainer.style.display = 'none'
+        submitButton.style.display = 'none'
+        title2.style.display = 'none'
+
+        retryButton.style.display = 'inline-block'
+
+        if (sum < 6) {
+          resultContainer.innerHTML = `<span style="color: black;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Negative</strong> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you are concerned about your mental health or mood you can find relevant information and resources at <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a>. Alternatively, you may wish to consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br><br>`
+        } else if (sum > 5 && sum < 9) {
+          resultContainer.innerHTML = `<span style="color: #FFC107;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>Further support is also available at: <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a> and <a href='https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/'>https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/ </a>`
+        } else {
+          resultContainer.innerHTML = `<span style="color: red;"><strong>Total Score: ${sum}</strong></span><br><br><strong>Positive</strong> screening for anxiety and/or depression. Please note that this is a screening result only and is <strong>not</strong> a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>Further support is also available at: <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a> and <a href='https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/'>https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/ </a>`
+        }
+      }
+
+      function retryQuiz() {
+        selectedOptions = new Array(quizData.length).fill(null)
+        score = 0
+        incorrectAnswers = []
+        quizContainer.innerHTML = ''
+        quizContainer.style.display = 'block'
+        submitButton.style.display = 'inline-block'
+        retryButton.style.display = 'none'
+        resultContainer.innerHTML = ''
+        displayQuestions()
+      }
+
+      submitButton.addEventListener('click', checkAnswers)
+      retryButton.addEventListener('click', retryQuiz)
+
+      displayQuestions()
+
+      function oldDisplayResult(sum) {
+        quizContainer.style.display = 'none'
+        submitButton.style.display = 'none'
+        title2.style.display = 'none'
+        retryButton.style.display = 'inline-block'
+
+        let answerSummary = `<strong>You answered as follows:</strong><br><br>`
+        quizData.forEach((q, i) => {
+          let labelText = ''
+          switch (selectedOptions[i]) {
+            case '0':
+              labelText = 'Not at all'
+              break
+            case '1':
+              labelText = 'Several days'
+              break
+            case '2':
+              labelText = 'More than half of the days'
+              break
+            case '3':
+              labelText = 'Nearly every day'
+              break
+          }
+          answerSummary += `${q.question}<br>${selectedOptions[i]} - ${labelText}<br><br>`
+        })
+        answerSummary += `If this is incorrect, please click restart the questionnaire.<br><br>`
+
+        if (sum < 6) {
+          resultContainer.innerHTML =
+            answerSummary +
+            `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above you have a negative screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.<br></br>If you are concerned about your mental health or mood you can find relevant information and resources at <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a>. Alternatively, you may wish to consider discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain the two can interact so managing both can lead to better treatment outcomes.<br>`
+        } else {
+          resultContainer.innerHTML =
+            answerSummary +
+            `<strong>Total Score: ${sum}</strong><br><br>Based on your responses above, you have a positive screening result for anxiety and depression. Please note that this is a screening result only and is not a substitute for a consultation with a relevant health professional.<br></br>If you were unaware of your mental health or mood being affected recently please consider now discussing this with a relevant health professional such as your general medical practitioner/family physician competent in making a diagnosis of anxiety or depression. Early low intensity treatment is very effective for anxiety and depression and if you are also suffering from persistent pain, the two can interact so managing both can lead to better treatment outcomes.<br><br>Further support is also available at: <a href='https://www.nhs.uk/every-mind-matters/'>Every Mind Matters - NHS(www.nhs.uk)</a> and <a href='https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/'>https://livewellwithpain.co.uk/resources-for-people-with-pain/shortcuts/ </a>`
+        }
+      }
+
+      function displayResult(sum) {
+        quizContainer.style.display = 'none'
+        submitButton.style.display = 'none'
+        title2.style.display = 'none'
+        retryButton.style.display = 'none'
+
+        let answerSummary = `<div style="text-align: left;"><strong>Confirm your answers</strong><br>`
+        answerSummary += `You answered as follows:<br><br>`
+        quizData.forEach((q, i) => {
+          let labelText = ''
+          switch (selectedOptions[i]) {
+            case '0':
+              labelText = 'Not at all'
+              break
+            case '1':
+              labelText = 'Several days'
+              break
+            case '2':
+              labelText = 'More than half of the days'
+              break
+            case '3':
+              labelText = 'Nearly every day'
+              break
+          }
+          answerSummary += `<strong>Q${i + 1}:</strong> ${
+            q.question
+          }<br><strong>Answer:</strong> ${
+            selectedOptions[i]
+          } - ${labelText}<br><br>`
+        })
+        answerSummary += `If this is incorrect, please click `
+        answerSummary += `<button id='inlineRetry' class='button' style="margin-left: 10px;">Restart questionnaire</button><br><br></div>`
+
+        let resultText = `<div style="text-align: left;"><strong>Results:</strong><br>`
+        resultText += `<strong>Total score = Q1+Q2+Q3+Q4 = ${sum}</strong><br>`
+        resultText += `• <i>Greater than or equal to a score of 6 is a positive result</i><br>`
+        resultText += `• <i>Less than a score of 6 is a negative result</i><br><br>`
+
+        let explanation = ''
+        if (sum < 6) {
+          explanation = `<strong>Explanation:</strong><br>Based on your responses above you have a <b>negative</b> screening for substantial signs and symptoms of anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`
+        } else {
+          explanation = `<strong>Explanation:</strong><br>Based on your responses above, you have a <b>positive</b> screening result for anxiety and depression. Please note that this is a screening result only and is <b>not</b> a substitute for a consultation with a relevant health professional.`
+        }
+
+        resultContainer.innerHTML =
+          answerSummary + resultText + explanation + `</div>`
+
+        document
+          .getElementById('inlineRetry')
+          .addEventListener('click', retryQuiz)
+      }
+    </script>
+  </body>
 </html>
